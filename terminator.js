@@ -21,9 +21,7 @@ var Terminator = function(element, config) {
     hiddenField.addEventListener('keydown', (function(e) {
         if ((e.key == 13 || e.keyCode == 13) && !this.locked) {
             console.log("Enter key pressed!");
-            this.lineBreak();
-            this.hiddenField.value = '';
-            this.prompt();
+            this.run();
         }
     }).bind(this));
     
@@ -37,6 +35,12 @@ var Terminator = function(element, config) {
 Terminator.prototype.lineBreak = function() {
     var br = document.createElement('br');
     this.element.appendChild(br);
+}
+
+Terminator.prototype.run = function() {
+    this.lineBreak();
+    this.hiddenField.value = '';
+    this.prompt();
 }
 
 Terminator.prototype.autoType = function(command) {
@@ -58,6 +62,7 @@ Terminator.prototype.autoType = function(command) {
     
     setTimeout((function() {
         this.locked = false;
+        this.run();
     }).bind(this), i * 100);
 }
 
