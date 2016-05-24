@@ -78,6 +78,13 @@ Terminator.prototype.run = function(command) {
     this.locked = true;
     this.activeCaret.style.display = 'none';
     this.activeCaret = null;
+    
+    //If nothing entered, return nothing
+    if (!command) {
+        this.lineBreak();
+        this.prompt();
+        return;
+    }
 
     //If a callback was provided to the prompt, run it once
     //Note that the callback is responsible for re-prompting when finished
