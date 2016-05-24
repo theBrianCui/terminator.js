@@ -1,6 +1,14 @@
-.blink {
-  animation: blink-animation 1s steps(5, start) infinite;
-  -webkit-animation: blink-animation 1s steps(5, start) infinite;
+.terminator-hidden {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    left: -99999;
+    overflow: hidden
+}
+
+.terminator-blink {
+  animation: blink-animation .75s steps(4, start) infinite;
+  -webkit-animation: blink-animation .75s steps(4, start) infinite;
 }
 
 @keyframes blink-animation {

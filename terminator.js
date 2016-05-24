@@ -2,7 +2,7 @@
 var Terminator = function(element, config) {
     var hiddenField = document.createElement('input');
     hiddenField.setAttribute('type', 'text');
-    hiddenField.style.opacity = 0;
+    hiddenField.classList.add('terminator-hidden');
     document.body.appendChild(hiddenField);
     
     this.element = element;
@@ -134,15 +134,13 @@ Terminator.prototype.autoType = function(command) {
 
 Terminator.prototype.prompt = function(prefix, callback) {
     this.hiddenField.value = '';
-    window.scrollTo(0, document.body.scrollHeight);
-   
     
     var promptWrapper = document.createElement('span');
     promptWrapper.innerHTML = prefix || this.config.prefix || '~$';
     var commandWrapper = document.createElement('span');
     var caretWrapper = document.createElement('span');
     caretWrapper.textContent = this.config.caret || '_';
-    caretWrapper.classList.add('blink');
+    caretWrapper.classList.add('terminator-blink');
     
     this.element.appendChild(promptWrapper);
     this.element.appendChild(commandWrapper);
@@ -153,4 +151,5 @@ Terminator.prototype.prompt = function(prefix, callback) {
     this.callback = callback || null;
     this.locked = false;
     this.hiddenField.focus();
+    window.scrollTo(0, document.body.scrollHeight);
 }
