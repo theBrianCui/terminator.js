@@ -10,6 +10,7 @@ var Terminator = function(element, config) {
     this.config = config || {};
     
     this.displayField = null;
+    this.activeCaret = null;
     this.callback = false;
     this.locked = false;
     
@@ -75,6 +76,8 @@ Terminator.prototype.lineBreak = function() {
 //Runs a callback, known program, or produces an error.
 Terminator.prototype.run = function(command) {
     this.locked = true;
+    this.activeCaret.style.display = 'none';
+    this.activeCaret = null;
 
     //If a callback was provided to the prompt, run it once
     //Note that the callback is responsible for re-prompting when finished
@@ -125,15 +128,21 @@ Terminator.prototype.autoType = function(command) {
 Terminator.prototype.prompt = function(prefix, callback) {
     this.hiddenField.value = '';
     window.scrollTo(0, document.body.scrollHeight);
-    prefix = prefix || this.config.prefix || '~$';
+   
     
     var promptWrapper = document.createElement('span');
-    promptWrapper.innerHTML = prefix;
+    promptWrapper.innerHTML = prefix || this.config.prefix || '~$';
     var commandWrapper = document.createElement('span');
+    var caretWrapper = document.createElement('span');
+    caretWrapper.textContent = this.config.caret || '_';
+    caretWrapper.classList.add('blink');
     
     this.element.appendChild(promptWrapper);
     this.element.appendChild(commandWrapper);
+    this.element.appendChild(caretWrapper);
+    
     this.displayField = commandWrapper;
+    this.activeCaret = caretWrapper;
     this.callback = callback || null;
     this.locked = false;
     this.hiddenField.focus();
