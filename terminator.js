@@ -110,9 +110,10 @@ Terminator.prototype.run = function(command) {
     }
 }
 
-Terminator.prototype.autoType = function(command) {
+Terminator.prototype.autoType = function(command, delay) {
     this.locked = true;
     this.displayField.textContent = '';
+    delay = delay || 0;
     
     var funcs = [];
     for (var i = 0; i < command.length; i++) {
@@ -124,12 +125,12 @@ Terminator.prototype.autoType = function(command) {
     }
     
     for (var i = 0; i < command.length; i++) {
-        setTimeout(funcs[i], i * 40);
+        setTimeout(funcs[i], i * 50 + delay);
     }
     
     setTimeout((function() {
         this.run(this.displayField.textContent);
-    }).bind(this), i * 40);
+    }).bind(this), i * 50 + 100 + delay);
 }
 
 Terminator.prototype.prompt = function(prefix, callback) {
