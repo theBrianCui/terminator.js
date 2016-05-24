@@ -18,6 +18,7 @@ var Terminator = function(element, config) {
     hiddenField.addEventListener('input', (function() {
         console.log('Typing!');
         if (this.displayField && !this.locked) {
+            window.scrollTo(0, document.body.scrollHeight);
             this.displayField.textContent = this.hiddenField.value;
         }
     }).bind(this));
@@ -25,6 +26,7 @@ var Terminator = function(element, config) {
     hiddenField.addEventListener('keydown', (function(e) {
         if ((e.key == 13 || e.keyCode == 13) && !this.locked) {
             console.log("Enter key pressed!");
+            window.scrollTo(0, document.body.scrollHeight);
             this.run(this.displayField.textContent);
         }
     }).bind(this));
@@ -73,6 +75,7 @@ Terminator.prototype.run = function(command) {
     if (this.callback) {
         this.callback(this, command);
         this.callback = null;
+        window.scrollTo(0, document.body.scrollHeight);
         return;
     }
     
@@ -82,7 +85,7 @@ Terminator.prototype.run = function(command) {
     if (args[0] && this.programs[args[0]]) {
         console.log("Running registered program " + args[0]);
         this.programs[args[0]](this, command);
-        
+        window.scrollTo(0, document.body.scrollHeight);
     } else {
         console.warn("Invalid command: " + command);
         this.writeLine(command + ": command not found");
@@ -115,6 +118,7 @@ Terminator.prototype.autoType = function(command) {
 
 Terminator.prototype.prompt = function(prefix, callback) {
     this.hiddenField.value = '';
+    window.scrollTo(0, document.body.scrollHeight);
     prefix = prefix || this.config.prefix || '~$';
     
     var promptWrapper = document.createElement('span');
