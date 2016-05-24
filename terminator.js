@@ -9,6 +9,7 @@ var Terminator = function(element, config) {
     this.config = config || {};
     
     this.displayField = null;
+    this.callback = false;
     this.locked = false;
     
     hiddenField.addEventListener('input', (function() {
@@ -21,7 +22,7 @@ var Terminator = function(element, config) {
     hiddenField.addEventListener('keydown', (function(e) {
         if ((e.key == 13 || e.keyCode == 13) && !this.locked) {
             console.log("Enter key pressed!");
-            this.run();
+            this.run(this.displayField.textContent);
         }
     }).bind(this));
     
@@ -37,9 +38,11 @@ Terminator.prototype.lineBreak = function() {
     this.element.appendChild(br);
 }
 
-Terminator.prototype.run = function() {
+Terminator.prototype.run = function(command) {
     this.locked = true;
     this.lineBreak();
+    
+    console.log("Just tried to run: " + command);
     
     this.hiddenField.value = '';
     this.locked = false;
@@ -65,12 +68,13 @@ Terminator.prototype.autoType = function(command) {
     
     setTimeout((function() {
         //this.locked = false;
-        this.run();
+        this.callback ? this.callback(this, this.displayField.textContent) : this.run(this.displayField.textContent);
     }).bind(this), i * 40);
 }
 
-Terminator.prototype.prompt = function(prefix) {
+Terminator.prototype.prompt = function(prefix, callback) {
     prefix = prefix || this.config.prefix || '~$';
+    
     var promptWrapper = document.createElement('span');
     promptWrapper.innerHTML = prefix;
     var commandWrapper = document.createElement('span');
@@ -78,6 +82,7 @@ Terminator.prototype.prompt = function(prefix) {
     this.element.appendChild(promptWrapper);
     this.element.appendChild(commandWrapper);
     this.displayField = commandWrapper;
-    
+    this.callback = callback || null;
+    this.locked = false;
     this.hiddenField.focus();
 }
