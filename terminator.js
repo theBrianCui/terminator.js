@@ -1,3 +1,4 @@
+//Create a new Terminator instance targeting a DOM element with a configuration.
 var Terminator = function(element, config) {
     var hiddenField = document.createElement('input');
     hiddenField.setAttribute('type', 'text');
@@ -35,10 +36,12 @@ var Terminator = function(element, config) {
     }
 };
 
+//Register a program to a Terminator instance with a function and name.
 Terminator.prototype.register = function(callback, name) {
     this.programs[name] = callback;
 }
 
+//Makes a linebreak and then prints text.
 Terminator.prototype.writeLine = function(content) {
     this.lineBreak();
     var span = document.createElement('span');
@@ -47,6 +50,7 @@ Terminator.prototype.writeLine = function(content) {
     return span;
 }
 
+//Makes a linebreak and prints HTML.
 Terminator.prototype.writeHTML = function(content) {
     this.lineBreak();
     var div = document.createElement('div');
@@ -60,15 +64,25 @@ Terminator.prototype.lineBreak = function() {
     this.element.appendChild(br);
 }
 
+//Runs a callback, known program, or produces an error.
 Terminator.prototype.run = function(command) {
     this.locked = true;
-    //this.lineBreak();
+
+    //If a callback was provided to the prompt, run it once
+    //Note that the callback is responsible for re-prompting when finished
+    if (this.callback) {
+        this.callback(this, command);
+        this.callback = null;
+        return;
+    }
     
+    //Otherwise, search the known programs list
     console.log("No callback for command: " + command);
     var args = command.split(' ');
     if (args[0] && this.programs[args[0]]) {
         console.log("Running registered program " + args[0]);
         this.programs[args[0]](this, args);
+        
     } else {
         console.warn("Invalid command: " + command);
         this.writeLine(command + ": command not found");
@@ -94,8 +108,7 @@ Terminator.prototype.autoType = function(command) {
     }
     
     setTimeout((function() {
-        //this.locked = false;
-        this.callback ? this.callback(this, this.displayField.textContent) : this.run(this.displayField.textContent);
+        this.run(this.displayField.textContent);
     }).bind(this), i * 40);
 }
 
