@@ -86,6 +86,7 @@ Terminator.prototype.run = function(command) {
     } else {
         console.warn("Invalid command: " + command);
         this.writeLine(command + ": command not found");
+        this.lineBreak();
         this.prompt();
     }
 }
