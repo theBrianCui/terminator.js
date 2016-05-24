@@ -81,7 +81,7 @@ Terminator.prototype.run = function(command) {
     var args = command.split(' ');
     if (args[0] && this.programs[args[0]]) {
         console.log("Running registered program " + args[0]);
-        this.programs[args[0]](this, args);
+        this.programs[args[0]](this, command);
         
     } else {
         console.warn("Invalid command: " + command);
