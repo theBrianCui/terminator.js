@@ -24,6 +24,12 @@ var Terminator = function(element, config) {
     }).bind(this));
     
     hiddenField.addEventListener('keydown', (function(e) {
+        //Prevent scrolling left and right
+        if (((e.key == 37) || (e.keyCode == 37)) || ((e.key == 39) || (e.keyCode == 39))) {
+            e.preventDefault();
+            return;
+        }
+        
         if ((e.key == 13 || e.keyCode == 13) && !this.locked) {
             console.log("Enter key pressed!");
             window.scrollTo(0, document.body.scrollHeight);
