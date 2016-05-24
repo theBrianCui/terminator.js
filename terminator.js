@@ -38,8 +38,11 @@ Terminator.prototype.lineBreak = function() {
 }
 
 Terminator.prototype.run = function() {
+    this.locked = true;
     this.lineBreak();
+    
     this.hiddenField.value = '';
+    this.locked = false;
     this.prompt();
 }
 
@@ -57,13 +60,13 @@ Terminator.prototype.autoType = function(command) {
     }
     
     for (var i = 0; i < command.length; i++) {
-        setTimeout(funcs[i], i * 100);
+        setTimeout(funcs[i], i * 40);
     }
     
     setTimeout((function() {
-        this.locked = false;
+        //this.locked = false;
         this.run();
-    }).bind(this), i * 100);
+    }).bind(this), i * 40);
 }
 
 Terminator.prototype.prompt = function(prefix) {
