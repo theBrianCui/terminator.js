@@ -12,6 +12,8 @@ var Terminator = function(element, config) {
     this.callback = false;
     this.locked = false;
     
+    this.programs = {};
+    
     hiddenField.addEventListener('input', (function() {
         console.log('Typing!');
         if (this.displayField && !this.locked) {
@@ -33,6 +35,26 @@ var Terminator = function(element, config) {
     }
 };
 
+Terminator.prototype.register = function(callback, name) {
+    this.programs[name] = callback;
+}
+
+Terminator.prototype.writeLine = function(content) {
+    this.lineBreak();
+    var span = document.createElement('span');
+    span.textContent = content;
+    this.element.appendChild(span);
+    return span;
+}
+
+Terminator.prototype.writeHTML = function(content) {
+    this.lineBreak();
+    var div = document.createElement('div');
+    div.innerHTML = content;
+    this.element.appendChild(div);
+    return div;
+}
+
 Terminator.prototype.lineBreak = function() {
     var br = document.createElement('br');
     this.element.appendChild(br);
@@ -40,13 +62,18 @@ Terminator.prototype.lineBreak = function() {
 
 Terminator.prototype.run = function(command) {
     this.locked = true;
-    this.lineBreak();
+    //this.lineBreak();
     
-    console.log("Just tried to run: " + command);
-    
-    this.hiddenField.value = '';
-    this.locked = false;
-    this.prompt();
+    console.log("No callback for command: " + command);
+    var args = command.split(' ');
+    if (args[0] && this.programs[args[0]]) {
+        console.log("Running registered program " + args[0]);
+        this.programs[args[0]](this, args);
+    } else {
+        console.warn("Invalid command: " + command);
+        this.writeLine(command + ": command not found");
+        this.prompt();
+    }
 }
 
 Terminator.prototype.autoType = function(command) {
@@ -73,6 +100,7 @@ Terminator.prototype.autoType = function(command) {
 }
 
 Terminator.prototype.prompt = function(prefix, callback) {
+    this.hiddenField.value = '';
     prefix = prefix || this.config.prefix || '~$';
     
     var promptWrapper = document.createElement('span');
