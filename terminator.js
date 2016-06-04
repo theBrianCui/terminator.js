@@ -50,7 +50,7 @@ var Terminator = function(element, config) {
 Terminator.prototype.register = function(callback, name) {
 	if (Array.isArray(name)) {
 		for (var i = 0; i < name.length; i++) {
-			this.programs[name] = callback;
+			this.programs[name[i]] = callback;
 		}
 		return;
 	}
