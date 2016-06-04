@@ -46,7 +46,15 @@ var Terminator = function(element, config) {
 };
 
 //Register a program to a Terminator instance with a function and name.
+//Also takes an array for registering aliases for a single command.
 Terminator.prototype.register = function(callback, name) {
+	if (Array.isArray(name)) {
+		for (var i = 0; i < name.length; i++) {
+			this.programs[name] = callback;
+		}
+		return;
+	}
+	
     this.programs[name] = callback;
 }
 
@@ -111,26 +119,30 @@ Terminator.prototype.run = function(command) {
 }
 
 Terminator.prototype.autoType = function(command, delay) {
-    this.locked = true;
-    this.displayField.textContent = '';
-    delay = delay || 0;
-    
-    var funcs = [];
-    for (var i = 0; i < command.length; i++) {
-        funcs[i] = (function(index) {
-            return (function() {
-                this.displayField.textContent += command[index];
-            }).bind(this);
-        }).call(this, i);
-    }
-    
-    for (var i = 0; i < command.length; i++) {
-        setTimeout(funcs[i], i * 50 + delay);
-    }
-    
-    setTimeout((function() {
-        this.run(this.displayField.textContent);
-    }).bind(this), i * 50 + 100 + delay);
+	if (!this.locked) {
+		this.locked = true;
+		this.displayField.textContent = '';
+		delay = delay || 0;
+		
+		var funcs = [];
+		for (var i = 0; i < command.length; i++) {
+			funcs[i] = (function(index) {
+				return (function() {
+					this.displayField.textContent += command[index];
+				}).bind(this);
+			}).call(this, i);
+		}
+		
+		for (var i = 0; i < command.length; i++) {
+			setTimeout(funcs[i], i * 50 + delay);
+		}
+		
+		setTimeout((function() {
+			this.run(this.displayField.textContent);
+		}).bind(this), i * 50 + 100 + delay);
+	} else {
+		console.warn("Terminal currently locked, cannot auto-type command: " + command);
+	}
 }
 
 Terminator.prototype.prompt = function(prefix, callback) {
