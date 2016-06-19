@@ -121,7 +121,10 @@ Terminator.prototype.run = function(command) {
     if (this.callback) {
         this.callback(this, command);
         this.callback = null;
-        window.scrollTo(0, document.body.scrollHeight);
+        
+        if (this.config.autoScroll)
+            window.scrollTo(0, document.body.scrollHeight);
+        
         return;
     }
     
@@ -132,9 +135,9 @@ Terminator.prototype.run = function(command) {
         console.log("Running registered program " + args[0]);
         this.execute(args[0], command);
         
-        if (this.config.autoScroll) {
+        if (this.config.autoScroll)
             window.scrollTo(0, document.body.scrollHeight);
-        }
+        
     } else {
         console.warn("Invalid command: " + command);
         this.writeLine(command + ": command not found");
@@ -189,5 +192,8 @@ Terminator.prototype.prompt = function(prefix, callback) {
     this.callback = callback || null;
     this.locked = false;
     this.hiddenField.focus();
-    window.scrollTo(0, document.body.scrollHeight);
+    
+    if (this.config.autoScroll) {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
 }
