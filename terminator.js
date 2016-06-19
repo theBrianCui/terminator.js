@@ -1,5 +1,20 @@
 //Create a new Terminator instance targeting a DOM element with a configuration.
 var Terminator = function(element, config) {
+    this.config = {
+        alwaysFocus: true,
+        autoScroll: true,
+        prefix: '~$',
+        caret: '_'
+    };
+    
+    //Override default settings
+    for (var setting in config) {
+        if (config.hasOwnProperty(setting) && this.config.hasOwnProperty(setting))
+            this.config[setting] = config[setting];
+    }
+    
+    console.log(JSON.stringify(this.config));
+
     var hiddenField = document.createElement('input');
     hiddenField.setAttribute('type', 'text');
     hiddenField.classList.add('terminator-hidden');
@@ -7,8 +22,6 @@ var Terminator = function(element, config) {
     
     this.element = element;
     this.hiddenField = hiddenField;
-    this.config = config || {};
-    
     this.displayField = null;
     this.activeCaret = null;
     this.callback = false;
@@ -38,7 +51,7 @@ var Terminator = function(element, config) {
         }
     }).bind(this));
     
-    if (config.alwaysFocus) {
+    if (this.config.alwaysFocus) {
         hiddenField.addEventListener('blur', (function() {
             setTimeout((function() {
                 var origX = window.scrollX, origY = window.scrollY;
@@ -113,7 +126,10 @@ Terminator.prototype.run = function(command) {
     if (args[0] && this.programs[args[0]]) {
         console.log("Running registered program " + args[0]);
         this.programs[args[0]](this, command);
-        window.scrollTo(0, document.body.scrollHeight);
+        
+        if (this.config.autoScroll) {
+            window.scrollTo(0, document.body.scrollHeight);
+        }
     } else {
         console.warn("Invalid command: " + command);
         this.writeLine(command + ": command not found");
@@ -153,10 +169,10 @@ Terminator.prototype.prompt = function(prefix, callback) {
     this.hiddenField.value = '';
     
     var promptWrapper = document.createElement('span');
-    promptWrapper.innerHTML = prefix || this.config.prefix || '~$';
+    promptWrapper.innerHTML = prefix || this.config.prefix;
     var commandWrapper = document.createElement('span');
     var caretWrapper = document.createElement('span');
-    caretWrapper.textContent = this.config.caret || '_';
+    caretWrapper.textContent = this.config.caret;
     caretWrapper.classList.add('terminator-blink');
     
     this.element.appendChild(promptWrapper);
