@@ -40,7 +40,11 @@ var Terminator = function(element, config) {
     
     if (config.alwaysFocus) {
         hiddenField.addEventListener('blur', (function() {
-            setTimeout((function() {this.hiddenField.focus();}).bind(this), 0);
+            setTimeout((function() {
+                var origX = window.scrollX, origY = window.scrollY;
+                this.hiddenField.focus();
+                window.scrollTo(origX, origY);
+            }).bind(this), 0);
         }).bind(this), true);
     }
 };
