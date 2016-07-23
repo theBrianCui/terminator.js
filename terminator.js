@@ -26,25 +26,6 @@ var Terminator = function(element, config) {
     this.callback = false;
     this.locked = false;
     
-    var programs = {};
-    //Register a program to a Terminator instance with a function and name.
-    //Also takes an array for registering aliases for a single command.
-    this.register = function(callback, name) {
-        if (Array.isArray(name)) {
-            for (var i = 0; i < name.length; i++) {
-                programs[name[i]] = callback;
-            }
-            return;
-        }
-        programs[name] = callback;
-    }
-    this.canExecute = function(name) {
-        return name && programs[name];
-    }
-    this.execute = function(name, command) {
-        return programs[name](this, command);
-    }
-    
     //Fill in the prompt value with the hiddenField value
     hiddenField.addEventListener('input', (function() {
         console.log('Typing!');
@@ -77,6 +58,27 @@ var Terminator = function(element, config) {
                 window.scrollTo(origX, origY);
             }).bind(this), 0);
         }).bind(this), true);
+    }
+    
+    var programs = {};
+    //Register a program to a Terminator instance with a function and name.
+    //Also takes an array for registering aliases for a single command.
+    this.register = function(callback, name) {
+        if (Array.isArray(name)) {
+            for (var i = 0; i < name.length; i++) {
+                programs[name[i]] = callback;
+            }
+            return;
+        }
+        programs[name] = callback;
+    }
+    
+    this.canExecute = function(name) {
+        return name && programs[name];
+    }
+    
+    this.execute = function(name, command) {
+        return programs[name](this, command);
     }
 };
 
