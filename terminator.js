@@ -21,12 +21,12 @@ var Terminator = (function() {
         hiddenField.classList.add('terminator-hidden');
         document.body.appendChild(hiddenField);
 
-        this.element = element;
-        this.hiddenField = hiddenField;
-        this.displayField = null;
-        this.activeCaret = null;
-        this.callback = false;
-        this.locked = false;
+        this.element = element; //The DOM node that will become the Terminal.
+        this.hiddenField = hiddenField; //The hidden DOM input node that accepts typing input.
+        this.displayField = null; //The DOM span node that displays what the user has typed.
+        this.activeCaret = null; //The DOM span node that trails the user's input as a caret.
+        this.callback = false; //A function that overrides the default program execution.
+        this.locked = false; //When locked, user input is disabled.
 
         //Fill in the prompt value with the hiddenField value
         hiddenField.addEventListener('input', (function() {
@@ -39,6 +39,7 @@ var Terminator = (function() {
 
         hiddenField.addEventListener('keydown', (function(e) {
             //Prevent scrolling left and right, which breaks the caret
+            //TODO implement a dynamic caret that follows scroll
             if (((e.key == 37) || (e.keyCode == 37)) || ((e.key == 39) || (e.keyCode == 39))) {
                 e.preventDefault();
                 return;
@@ -150,6 +151,7 @@ var Terminator = (function() {
         }
     };
 
+    //Lock the terminal, and automatically type out, and run, a string.
     Terminator.prototype.autoType = function(command, delay) {
         if (!this.locked) {
             this.locked = true;
@@ -177,6 +179,8 @@ var Terminator = (function() {
         }
     };
 
+     /* Build and display the prompt element, then accept input.
+     * If a callback is provided, save it for the run command. */
     Terminator.prototype.prompt = function(prefix, callback) {
         this.hiddenField.value = '';
 
@@ -187,6 +191,8 @@ var Terminator = (function() {
         caretWrapper.textContent = this.config.caret;
         caretWrapper.classList.add('terminator-blink');
 
+        /* Append elements to the Terminal in the following order:
+            prompt, command, caret */
         this.element.appendChild(promptWrapper);
         this.element.appendChild(commandWrapper);
         this.element.appendChild(caretWrapper);
