@@ -1,6 +1,7 @@
 /* Preserve global scope by wrapping all code in a immediately-executed function */
 var Terminator = (function() {
     let DOMHelper = {
+        //Append many children at once.
         append: function (parent, nodes) {
             for (let i = 0; i < nodes.length; i++) {
                 parent.appendChild(nodes[i]);
@@ -185,16 +186,16 @@ var Terminator = (function() {
         }
     };
     
-
-
      /* Build and display the prompt element, then accept input.
      * If a callback is provided, save it for the run command. */
     Terminator.prototype.prompt = function(prefix, callback) {
         this.hiddenField.value = '';
 
         let promptWrapper = document.createElement('div');
+        //Focus and scroll on the prompt when clicked
         promptWrapper.addEventListener('click', () => {
             this.hiddenField.focus();
+            window.scrollTo(0, document.body.scrollHeight);
         });
         
         let prompt = document.createElement('span');
