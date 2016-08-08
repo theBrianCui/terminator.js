@@ -96,16 +96,15 @@ var Terminator = (function() {
 
     //Makes a linebreak and then prints text.
     Terminator.prototype.writeLine = function(content) {
-        this.lineBreak();
         let span = document.createElement('span');
         span.textContent = content;
         this.element.appendChild(span);
+        this.lineBreak();
         return span;
     };
 
     //Makes a linebreak and prints HTML.
     Terminator.prototype.writeHTML = function(content) {
-        this.lineBreak();
         let div = document.createElement('div');
         div.innerHTML = content;
         this.element.appendChild(div);
@@ -125,7 +124,6 @@ var Terminator = (function() {
 
         //If nothing entered, return nothing
         if (!command) {
-            this.lineBreak();
             this.prompt();
             return;
         }
@@ -155,7 +153,6 @@ var Terminator = (function() {
         } else {
             console.warn("Invalid command: " + command);
             this.writeLine(command + ": command not found");
-            this.lineBreak();
             this.prompt();
         }
     };
@@ -199,7 +196,6 @@ var Terminator = (function() {
         promptWrapper.addEventListener('click', () => {
             this.hiddenField.focus();
         });
-
         
         let prompt = document.createElement('span');
         prompt.innerHTML = prefix || this.config.prefix;
