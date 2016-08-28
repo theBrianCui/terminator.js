@@ -33,6 +33,19 @@ Then, whenever you're ready to accept commands, call
 
     theTerminator.prompt();
 	
+## Build Process
+
+Clone the repsitory. With NodeJS (4+) and NPM (3+), first install the dependencies:
+
+```
+npm install
+npm install -g gulp-cli
+```
+
+Then, to build, run
+
+`gulp`
+	
 ## API
 
 #### `register(callback, name)`
