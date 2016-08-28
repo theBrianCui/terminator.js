@@ -53,7 +53,12 @@ QUnit.test('Constructor applies optional settings', function(assert) {
 var instance = null;
 function jType(jObject, text) {
 	for (var i = 0; i < text.length; i++) {
+		jObject.val(jObject.val() + text.charAt(i));
 		jObject.trigger($.Event('keydown', { keyCode: text.charCodeAt(i) }));
+		jObject.trigger('input');
+		
+		var event = new Event('input');
+		jObject[0].dispatchEvent(event);
 	}
 }
 
@@ -78,10 +83,20 @@ QUnit.test('Prompt adds a prompt', function(assert) {
 QUnit.test('Typing should do nothing when no prompt is present', function(assert) {
 	var initialContent = instance.element.innerHTML;
 	
-	var jTerminator = $('#terminator');
-	jTerminator.trigger('click');
-	jType(jTerminator, 'sdfljkdsjlkflkdsf');
+	var input = $(instance.hiddenField);
+	jType(input, 'sdfljkdsjlkflkdsf');
 	
 	assert.strictEqual(initialContent, instance.element.innerHTML, 
 		'prompt input did not change after typing')
+});
+QUnit.test('Prompt should enable typing', function(assert) {
+	instance.prompt();
+	
+	var input = $(instance.hiddenField);
+	var inputString = 'sdfljkdsjlkflkdsf';
+	jType(input, inputString);
+	
+	var promptText = document.querySelectorAll('#terminator div:last-child')[0].children;
+	console.log(document.querySelectorAll('#terminator div:last-child')[0].innerHTML);
+	assert.strictEqual(promptText[1].innerHTML, inputString, 'prompt fills in with typed text');
 });
