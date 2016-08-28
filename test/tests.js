@@ -51,6 +51,12 @@ QUnit.test('Constructor applies optional settings', function(assert) {
 });
 
 var instance = null;
+function jType(jObject, text) {
+	for (var i = 0; i < text.length; i++) {
+		jObject.trigger($.Event('keydown', { keyCode: text.charCodeAt(i) }));
+	}
+}
+
 QUnit.module('Prompt Tests', {
 	beforeEach: function(assert) {
 		instance = new Terminator(document.getElementById('terminator'));
@@ -63,9 +69,19 @@ QUnit.test('Prompt adds a prompt', function(assert) {
 	instance.prompt();
 
 	var promptText = document.querySelectorAll('#terminator div:last-child')[0].children;
-	console.log(document.querySelectorAll('#terminator div:last-child')[0].innerHTML);
+
 	assert.strictEqual(promptText[0].innerHTML, instance.config.prefix, 
 		'prefix is included at beginning of prompt');
 	assert.strictEqual(promptText[promptText.length - 1].innerHTML, instance.config.caret, 
 		'caret is included at end of prompt');
+});
+QUnit.test('Typing should do nothing when no prompt is present', function(assert) {
+	var initialContent = instance.element.innerHTML;
+	
+	var jTerminator = $('#terminator');
+	jTerminator.trigger('click');
+	jType(jTerminator, 'sdfljkdsjlkflkdsf');
+	
+	assert.strictEqual(initialContent, instance.element.innerHTML, 
+		'prompt input did not change after typing')
 });
