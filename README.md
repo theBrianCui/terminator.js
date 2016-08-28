@@ -51,19 +51,27 @@ The first argument (terminal) provides access to the rest of the API within the 
 
 The second argument (command) contains the entire string that the user typed into the prompt. If the user types `echo bananas` in the prompt and presses enter, `command === 'echo bananas'`.
 
-#### `prompt([prefix=''], [callback=undefined])`
+#### `.prompt([prefix=''], [callback=undefined])`
 
-Prompts the user for input. An optional `prefix` string can be provided as the first argument to override the default prefix defined in the configuration options. An optional `callback` second argument can be provided to override the function executed after the user presses the enter key.
+Prompts the user for input. When the user presses enter, the terminal finds the function registered with the corresponding name to the first argument typed and executes that function. See above for details on how to register functions.
 
-#### `writeLine(text)`
+An optional `prefix` string can be provided as the first argument to override the default prefix defined in the configuration options. An optional `callback` second argument can be provided to override the function executed after the user presses the enter key.
+
+#### `.autoType(command, [delay=0])`
+
+Automatically types a string `command` into the prompt, letter by letter, to simulate human typing. When auto-typing finishes, the command executes. An optional `delay` parameter can be provided to delay (in ms) the insertion of the first character.
+
+When `.autoType` is called, the contents of the terminal are cleared (reset) and user input is ignored.
+
+#### `.writeLine(text)`
 
 Inserts text (will be escaped) in a `span` and a newline (`br`) into the terminal.
 
-#### `writeHTML(content)`
+#### `.writeHTML(content)`
 
 Inserts a `div` with the `innerHTML` set to `content` to the terminal.
 
-#### `lineBreak()`
+#### `.lineBreak()`
 
 Inserts a newline (`br`) into the terminal.
 
