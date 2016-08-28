@@ -35,16 +35,24 @@ Then, whenever you're ready to accept commands, call
 	
 ## Build Process
 
-Clone the repsitory. With NodeJS (4+) and NPM (3+), first install the dependencies:
+Clone the repsitory. With NodeJS (4+) and NPM (3+), first install the dependencies from command line:
 
 ```
 npm install
 npm install -g gulp-cli
 ```
 
-Then, to build, run
+The source code for the terminator.js library is located in the `src` directory. To build terminator.js, run
 
-`gulp`
+```
+gulp
+```
+
+in the command line. This will build ready-to-use files into the `dist` directory.
+
+## Testing
+
+terminator.js uses [QUnit](https://qunitjs.com/) for browser based testing. All test code is located in the `test` folder. To run tests, first have a build ready in the `dist` directory (read "Build Process" above), and then open the `test/index.html` file in your browser.
 	
 ## API
 
