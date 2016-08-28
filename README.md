@@ -56,7 +56,7 @@ terminator.js uses [QUnit](https://qunitjs.com/) for browser based testing. All 
 	
 ## API
 
-#### `register(callback, name)`
+#### `.register(callback, name)`
 
 Registers a standard JS function under the command `name`. An array of multiple names can be provided to serve as aliases. 
 
@@ -82,7 +82,7 @@ An optional `prefix` string can be provided as the first argument to override th
 
 Automatically types a string `command` into the prompt, letter by letter, to simulate human typing. When auto-typing finishes, the command executes. An optional `delay` parameter can be provided to delay (in ms) the insertion of the first character.
 
-When `.autoType` is called, the contents of the terminal are cleared (reset) and user input is ignored.
+When `.autoType` is called, the prompt input is cleared and user input is ignored. Make sure a prompt is available (call `.prompt`) before calling `.autoType`, or else nothing will get actually typed.
 
 #### `.writeLine(text)`
 

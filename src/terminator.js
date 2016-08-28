@@ -36,7 +36,7 @@ var Terminator = (function() {
         this.displayField = null; //The DOM span node that displays what the user has typed.
         this.activeCaret = null; //The DOM span node that trails the user's input as a caret.
         this.callback = false; //A function that overrides the default program execution.
-        this.locked = false; //When locked, user input is disabled.
+        this.locked = true; //When locked, user input is disabled.
 
         //Fill in the prompt value with the hiddenField value
         hiddenField.addEventListener('input', () => {
@@ -160,6 +160,7 @@ var Terminator = (function() {
 
     //Lock the terminal, and automatically type out, and run, a string.
     Terminator.prototype.autoType = function(command, delay) {
+        console.log(`Auto typing "${command}" with delay ${delay}`);
         if (!this.locked) {
             this.locked = true;
             this.displayField.textContent = '';
